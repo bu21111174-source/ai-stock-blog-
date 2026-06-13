@@ -28,24 +28,30 @@ function isRelevant(item) {
 }
 
 export async function fetchRelevantNews({ maxItems = 5 } = {}) {
-  const results = [];
-
-  for (const url of FEEDS) {
-    try {
-      const feed = await parser.parseURL(url);
-      for (const item of feed.items) {
-        if (isRelevant(item)) {
-          results.push({
-            title: item.title,
-            link: item.link,
-            summary: item.contentSnippet,
-            pubDate: item.pubDate,
-            source: feed.title,
-          });
-        }
+  const feeds = await Promise.all(
+    FEEDS.map(async (url) => {
+      try {
+        return await parser.parseURL(url);
+      } catch (err) {
+        console.error(`피드 수집 실패: ${url}`, err.message);
+        return null;
       }
-    } catch (err) {
-      console.error(`피드 수집 실패: ${url}`, err.message);
+    })
+  );
+
+  const results = [];
+  for (const feed of feeds) {
+    if (!feed) continue;
+    for (const item of feed.items) {
+      if (isRelevant(item)) {
+        results.push({
+          title: item.title,
+          link: item.link,
+          summary: item.contentSnippet,
+          pubDate: item.pubDate,
+          source: feed.title,
+        });
+      }
     }
   }
 

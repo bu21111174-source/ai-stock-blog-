@@ -50,7 +50,7 @@ export async function generateArticle(newsItems) {
 
   const message = await client.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 4096,
+    max_tokens: 2048,
     system: SYSTEM_PROMPT,
     tools: [ARTICLE_TOOL],
     tool_choice: { type: "tool", name: "submit_article" },
