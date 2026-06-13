@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { getAllPosts, getPostBySlug } from "../../../lib/posts";
+import Comments from "../../components/Comments";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -21,15 +23,26 @@ export default function PostPage({ params }) {
   }
 
   return (
-    <article>
+    <article className="post-article">
+      <Link href="/" className="back-link">
+        ← 목록으로
+      </Link>
       <h1>{post.title}</h1>
-      <p style={{ color: "#666" }}>{post.date}</p>
-      <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+      <p className="post-meta">{post.date}</p>
+      <div
+        className="post-body"
+        dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+      />
       {post.tags?.length > 0 && (
-        <p style={{ color: "#999", fontSize: "0.85rem" }}>
-          태그: {post.tags.join(", ")}
-        </p>
+        <div className="tag-list">
+          {post.tags.map((tag) => (
+            <span className="tag" key={tag}>
+              #{tag}
+            </span>
+          ))}
+        </div>
       )}
+      <Comments />
     </article>
   );
 }

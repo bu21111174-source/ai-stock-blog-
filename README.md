@@ -108,12 +108,30 @@ curl -H "Authorization: Bearer <CRON_SECRET>" https://ai-stock-blog.vercel.app/a
 
 > Vercel Hobby(무료) 플랜은 Cron Job이 하루 1회로 제한됩니다 - 일 1편 발행에 적합합니다.
 
-## 8. RSS 피드/키워드 커스터마이징
+## 8. 댓글 기능 (Giscus)
+
+GitHub Discussions를 댓글 저장소로 사용하는 무료 댓글 위젯입니다.
+
+1. 저장소가 **Public**이어야 합니다 (Private면 giscus가 동작하지 않음)
+2. 저장소 → Settings → General → Features → **Discussions** 체크박스 활성화
+3. https://github.com/apps/giscus 접속 → 해당 저장소에 giscus 앱 설치(Install)
+4. https://giscus.app 접속 → 저장소 이름 입력 → 페이지 하단에 자동 생성된
+   `data-repo-id`, `data-category`, `data-category-id` 값 확인
+5. Vercel 프로젝트 → Settings → Environment Variables에 추가:
+   | Key | Value |
+   |---|---|
+   | `NEXT_PUBLIC_GISCUS_REPO` | `bu21111174-source/ai-stock-blog-` |
+   | `NEXT_PUBLIC_GISCUS_REPO_ID` | giscus.app에서 확인한 값 |
+   | `NEXT_PUBLIC_GISCUS_CATEGORY` | `General` (또는 선택한 카테고리명) |
+   | `NEXT_PUBLIC_GISCUS_CATEGORY_ID` | giscus.app에서 확인한 값 |
+6. Redeploy 하면 글 상세 페이지 하단에 댓글창이 표시됩니다.
+
+## 9. RSS 피드/키워드 커스터마이징
 
 `scripts/fetchNews.js`의 `FEEDS`와 `KEYWORDS` 배열을 수정해
 다루고 싶은 주제(니치)에 맞게 조정할 수 있습니다.
 
-## 9. 도메인 연결 (나중에)
+## 10. 도메인 연결 (나중에)
 
 `aisemitrend.com` 구매 후:
 1. Vercel 프로젝트 → Settings → Domains → 도메인 추가
