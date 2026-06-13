@@ -1,0 +1,23 @@
+{
+  "name": "ai-stock-blog",
+  "version": "1.0.0",
+  "description": "AI반도체/주식 시황 자동 콘텐츠 생성 및 워드프레스 발행 파이프라인",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "generate": "node scripts/index.js",
+    "news": "node scripts/fetchNews.js",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.0",
+    "dotenv": "^16.4.5",
+    "gray-matter": "^4.0.3",
+    "next": "^14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "rss-parser": "^3.13.0"
+  }
+}
