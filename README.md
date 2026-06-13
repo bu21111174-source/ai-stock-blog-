@@ -70,11 +70,43 @@ git push
 
 푸시하면 Vercel이 자동으로 다시 빌드/배포합니다.
 
-## 7. 매일 자동 실행 (선택)
+## 7. 매일 자동 실행 (Vercel Cron, 노트북과 무관하게 동작)
 
-macOS의 `launchd` 또는 cron으로 매일 정해진 시간에
-`npm run generate && git add content/ && git commit -m "Daily post" && git push`를
-실행하도록 등록하면 완전 자동화가 가능합니다. 필요하면 설정을 도와드릴게요.
+Vercel의 Cron Jobs 기능으로 매일 한국시간 08:00에 `/api/generate`를 자동 호출해
+글을 생성하고 GitHub에 직접 커밋합니다 (커밋되면 Vercel이 자동 재배포).
+
+### 설정 방법
+
+1. **GitHub Personal Access Token 발급**
+   - https://github.com/settings/tokens → "Generate new token (classic)"
+   - 권한(scope): `repo` 체크
+   - 생성된 토큰 복사 (한 번만 표시됨)
+
+2. **CRON_SECRET 생성**
+   - 임의의 랜덤 문자열 생성 (예: `openssl rand -hex 16` 실행 결과)
+
+3. **Vercel 프로젝트 → Settings → Environment Variables**에 아래 값 추가:
+   | Key | Value |
+   |---|---|
+   | `ANTHROPIC_API_KEY` | Anthropic API 키 |
+   | `GH_TOKEN` | 위에서 발급한 GitHub 토큰 |
+   | `GITHUB_OWNER` | GitHub 계정명 (예: `bu21111174-source`) |
+   | `GITHUB_REPO` | 저장소명 (예: `ai-stock-blog-`) |
+   | `CRON_SECRET` | 위에서 생성한 랜덤 문자열 |
+
+4. 환경변수 추가 후 **Redeploy** (Settings → Deployments → 최신 배포 → Redeploy)
+
+5. `vercel.json`의 `crons` 설정에 따라 매일 UTC 23:00(한국시간 08:00)에 자동 실행됩니다.
+
+### 수동 테스트
+
+배포 후 아래 명령으로 직접 호출해 테스트할 수 있습니다 (CRON_SECRET 필요):
+
+```bash
+curl -H "Authorization: Bearer <CRON_SECRET>" https://ai-stock-blog.vercel.app/api/generate
+```
+
+> Vercel Hobby(무료) 플랜은 Cron Job이 하루 1회로 제한됩니다 - 일 1편 발행에 적합합니다.
 
 ## 8. RSS 피드/키워드 커스터마이징
 
