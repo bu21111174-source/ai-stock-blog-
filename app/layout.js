@@ -4,6 +4,9 @@ import { Analytics } from "@vercel/analytics/next";
 export const metadata = {
   title: "AI반도체 트렌드 | aisemitrend",
   description: "AI반도체·코스피 시황을 매일 정리하는 블로그",
+  verification: {
+    google: "x-xj7I2o5VsYUUluwutxxeeKU30bpSYYgDDPHiyU5bo",
+  },
 };
 
 export default function RootLayout({ children }) {
