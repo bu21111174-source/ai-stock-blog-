@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: "AI반도체 트렌드 | aisemitrend",
@@ -21,6 +22,7 @@ export default function RootLayout({ children }) {
             본 사이트의 콘텐츠는 정보 제공을 목적으로 하며, 투자 권유가 아닙니다.
           </footer>
         </div>
+        <Analytics />
       </body>
     </html>
   );
