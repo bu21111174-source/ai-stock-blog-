@@ -50,7 +50,7 @@ export async function generateArticle(newsItems) {
 
   const message = await client.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 2048,
+    max_tokens: 4096,
     system: SYSTEM_PROMPT,
     tools: [ARTICLE_TOOL],
     tool_choice: { type: "tool", name: "submit_article" },
@@ -62,9 +62,13 @@ export async function generateArticle(newsItems) {
     ],
   });
 
+  if (message.stop_reason === "max_tokens") {
+    throw new Error("응답이 max_tokens 제한으로 잘렸습니다.");
+  }
+
   const toolUse = message.content.find((block) => block.type === "tool_use");
-  if (!toolUse) {
-    throw new Error("모델이 submit_article 도구를 호출하지 않았습니다.");
+  if (!toolUse || !toolUse.input.contentHtml) {
+    throw new Error("모델이 submit_article 도구를 올바르게 호출하지 않았습니다.");
   }
 
   return toolUse.input;
